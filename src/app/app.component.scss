@@ -20,6 +20,10 @@ p {
   margin: 0;
 }
 
+input {
+  height: 40px;
+}
+
 .spacer {
   flex: 1;
 }
@@ -49,10 +53,4 @@ p {
   max-width: 960px;
   flex-direction: column;
   align-items: center;
-}
-
-.buttom-container {
-  position: relative;
-  top: 480px;
-  float: right;
 }

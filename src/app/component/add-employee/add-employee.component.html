@@ -1,0 +1,41 @@
+<div class="toolbar">
+  <div class="m-2">Add Employee Details</div>
+</div>
+
+<div class="content">
+  <form [formGroup]="employeeInfoForm">
+    <div class="flex justify-center w-100">
+      <div class="mb-3 input-group">
+        <i class="pi pi-user"></i>
+        <input type="text" pInputText placeholder="Enter username" [formControlName]="'employeeName'" />
+      </div>
+      <div class="mb-3 input-group">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-briefcase"></i>
+        </span>
+        <p-dropdown [options]="role" optionLabel="label" placeholder="Select role" styleClass="role-dropdown"
+          [formControlName]="'employeeRole'" />
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="mb-3 input-group">
+          <p-calendar inputStyleClass="calender-input" styleClass="calender" [showIcon]="true" inputId="startDate"
+            [formControlName]="'startDate'" />
+        </div>
+        <div class="d-flex justify-center align-items-center">
+          <i class="m-3 pi pi-arrow-right" style="color: #1DA1F2;"></i>
+        </div>
+
+        <div class="mb-3 input-group">
+          <p-calendar inputStyleClass="calender-input" styleClass="calender" [showIcon]="true" inputId="endDate"
+            [formControlName]="'endDate'" />
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="footer">
+  <div class="button-container">
+    <p-button class="secondary" label="Cancel" severity="secondary" (click)="onCancel()"/>
+    <p-button class="primary" label="Save" (click)="onSave()"/>
+  </div>
+</div>

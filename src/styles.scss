@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+p-button > button {
+  width: 73px;
+  height: 40px;
+  outline: none;
+  border: none;
+}
+.primary > button {
+  color: #FFFFFF;
+  background-color: #1DA1F2;
+}
+.secondary > button {
+  background-color: #EDF8FF;
+  color: #1DA1F2;
+}
+.calender {
+    flex-direction: row-reverse;
+}
+.calender-input {
+  border: none;
+}
+.role-dropdown {
+  border: none;
+}
