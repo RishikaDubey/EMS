@@ -19,7 +19,6 @@
 .content {
   display: flex;
   margin: 82px auto 32px;
-  padding: 0 16px;
   max-width: 960px;
   flex-direction: column;
   align-items: center;
@@ -29,4 +28,63 @@
   position: relative;
   top: 480px;
   float: right;
+}
+.list-container {
+  padding: 15px;
+}
+.card-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 400px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  gap: 1em;
+    margin-bottom: 0.75em;
+}
+
+.card {
+  flex-direction: row;
+  gap: 1em;
+}
+
+/* Card Item */
+.card-item {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  flex: 1;
+}
+
+
+
+.card:last-child {
+  border-bottom: none;
+}
+
+/* Card Title */
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+/* Card Subtitle */
+.card-subtitle {
+  font-size: 14px;
+  color: #777;
+  margin: 5px 0;
+}
+
+/* Card Date */
+.card-date {
+  font-size: 12px;
+  color: #aaa;
+  margin: 0;
+}
+
+.trash-icon {
+  padding: 10px;
 }

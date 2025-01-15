@@ -3,7 +3,24 @@
 </div>
 
 <div class="content">
-  <div>   <img src="../assets/image/noUSer.svg" alt="No Employee" width="250" height="250" />
+  <div *ngIf="employeeList.length" class="w-100 list-container">
+    <ul *ngFor="let employee of employeeList" class="card-list">
+      <div class="card d-flex">
+        <li class="card-item" (click)="editEmployeeDetails(employee.id)">
+          <h3 class="card-title">{{employee.employeeName}}</h3>
+          <p class="card-subtitle">{{employee.employeeRole?.label}}</p>
+          <p class="card-date">From {{employee.startDate | date: 'd MMM, y'}}</p>
+        </li>
+        <div class="d-flex align-items-center trash-icon" (click)="deleteUser(employee.id)">
+          <i class="pi pi-trash" style="color: #c00;"></i>
+        </div>
+      </div>
+
+
+    </ul>
+  </div>
+  <div *ngIf="!employeeList.length">
+    <img src="../assets/image/noUSer.svg" alt="No Employee" width="250" height="250" />
   </div>
 </div>
 

@@ -19,6 +19,11 @@ p-button > button {
 }
 .calender {
     flex-direction: row-reverse;
+    button {
+      background-color: #fff;
+      border: #fff;
+      color: #1da1f2;
+    }
 }
 .calender-input {
   border: none;

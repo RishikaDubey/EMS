@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -6,91 +8,170 @@ import { Injectable } from '@angular/core';
 export class IndexedDBService {
   private readonly dbName: string = 'myDatabase';
   private readonly dbVersion: number = 1;
-  private db: IDBDatabase | null = null;
+  private db: IDBDatabase | undefined;
+  private dbStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor() {
-    this.openDatabase();
+    // This is to emit the database status on service initialization
+    this.dbStatusSubject.next(!!this.db);
   }
 
-  private openDatabase() {
-    const request = indexedDB.open(this.dbName, this.dbVersion);
+  // Open Database method to initialize or retrieve the existing connection
+  private openDatabase(): Observable<IDBDatabase> {
+    return new Observable((observer) => {
+      const request = indexedDB.open(this.dbName, this.dbVersion);
 
-    request.onsuccess = (event: Event) => {
-      this.db = (event.target as IDBRequest).result;
-      console.log('Database opened successfully');
-    };
-
-    request.onerror = (event: Event) => {
-      console.error('Error opening database:', (event.target as IDBRequest).error);
-    };
-
-    request.onupgradeneeded = (event: Event) => {
-      const db = (event.target as IDBRequest).result;
-      if (!db.objectStoreNames.contains('employees')) {
-        db.createObjectStore('employees', { keyPath: 'id' });
-      }
-    };
-  }
-
-  // Add item to IndexedDB
-  addItem(item: any): void {
-    if (!this.db) {
-      console.error('Database not initialized');
-      return;
-    }
-
-    const transaction = this.db.transaction('employees', 'readwrite');
-    const store = transaction.objectStore('employees');
-    store.add(item);
-
-    transaction.oncomplete = () => {
-      console.log('Item added successfully');
-    };
-
-    transaction.onerror = (event) => {
-      console.error('Error adding item:', (event.target as IDBTransaction).error);
-    };
-  }
-
-  // Get item from IndexedDB
-  getItem(id: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (!this.db) {
-        reject('Database not initialized');
-        return;
-      }
-
-      const transaction = this.db.transaction('employees', 'readonly');
-      const store = transaction.objectStore('employees');
-      const request = store.get(id);
-
-      request.onsuccess = () => {
-        resolve(request.result);
+      request.onsuccess = (event: Event) => {
+        this.db = (event.target as IDBRequest).result;
+        console.log('Database opened successfully');
+        this.dbStatusSubject.next(true); // Emit DB is ready
+        observer.next(this.db); // Emit the database instance
+        observer.complete();
       };
 
-      request.onerror = (event) => {
-        //reject('Error retrieving item:', (event.target as IDBRequest).error);
+      request.onerror = (event: Event) => {
+        const error = (event.target as IDBRequest).error;
+        console.error('Error opening database:', error);
+        this.dbStatusSubject.next(false); // Emit DB failure
+        observer.error(error); // Emit error
+      };
+
+      request.onupgradeneeded = (event: Event) => {
+        const db = (event.target as IDBRequest).result;
+        if (!db.objectStoreNames.contains('employees')) {
+          db.createObjectStore('employees', { keyPath: 'id' });
+        }
       };
     });
   }
 
-  // Delete item from IndexedDB
-  deleteItem(id: string): void {
-    if (!this.db) {
-      console.error('Database not initialized');
-      return;
+  // Ensure DB connection is ready or open it if necessary
+  private ensureDBConnection(): Observable<void> {
+    if (this.db) {
+      return new Observable((observer) => {
+        observer.next(); // DB is already ready
+        observer.complete();
+      });
+    } else {
+      return this.openDatabase().pipe(
+        map(() => {}), // Convert the DB instance to void
+        catchError((error) => {
+          console.error('Error opening database:', error);
+          return throwError(error); // Re-throw error
+        })
+      );
     }
+  }
 
-    const transaction = this.db.transaction('employees', 'readwrite');
-    const store = transaction.objectStore('employees');
-    store.delete(id);
+  // Add item to the database
+  addItem(item: any): Observable<void> {
+    return new Observable((observer) => {
+      this.ensureDBConnection().subscribe({
+        next: () => {
+          const transaction = this.db!.transaction('employees', 'readwrite');
+          const store = transaction.objectStore('employees');
+          store.add(item);
 
-    transaction.oncomplete = () => {
-      console.log('Item deleted successfully');
-    };
+          transaction.oncomplete = () => {
+            console.log('Item added successfully');
+            observer.next(); // Emit completion
+            observer.complete();
+          };
 
-    transaction.onerror = (event) => {
-      console.error('Error deleting item:', (event.target as IDBTransaction).error);
-    };
+          transaction.onerror = (event) => {
+            console.error('Error adding item:', (event.target as IDBTransaction).error);
+            observer.error((event.target as IDBTransaction).error); // Emit error
+          };
+        },
+        error: (err) => {
+          observer.error(err); // Emit error if DB is not open
+        }
+      });
+    });
+  }
+
+  // Get employee by ID
+  getEmployeeById(id: number): Observable<any> {
+    return new Observable((observer) => {
+      this.ensureDBConnection().subscribe({
+        next: () => {
+          const transaction = this.db!.transaction('employees', 'readonly');
+          const store = transaction.objectStore('employees');
+          const request = store.get(id);
+
+          request.onsuccess = () => {
+            observer.next(request.result); // Emit the result
+            observer.complete();
+          };
+
+          request.onerror = (event) => {
+            console.error('Error retrieving employee:', (event.target as IDBRequest).error);
+            observer.error((event.target as IDBRequest).error); // Emit error
+          };
+        },
+        error: (err) => {
+          observer.error(err); // Emit error if DB is not open
+        }
+      });
+    });
+  }
+
+  // Get all employees
+  getAllEmployees(): Observable<any[]> {
+    return new Observable((observer) => {
+      this.ensureDBConnection().subscribe({
+        next: () => {
+          const transaction = this.db!.transaction('employees', 'readonly');
+          const store = transaction.objectStore('employees');
+          const request = store.getAll();
+
+          request.onsuccess = () => {
+            console.log('Retrieved employees:', request.result);
+            observer.next(request.result); // Emit result
+            observer.complete();
+          };
+
+          request.onerror = (event) => {
+            console.error('Error retrieving employees:', (event.target as IDBRequest).error);
+            observer.error((event.target as IDBRequest).error); // Emit error
+          };
+        },
+        error: (err) => {
+          observer.error(err); // Emit error if DB is not open
+        }
+      });
+    });
+  }
+
+  // Delete item from the database
+  deleteItem(id: number): Observable<void> {
+    return new Observable((observer) => {
+      this.ensureDBConnection().subscribe({
+        next: () => {
+          const transaction = this.db!.transaction('employees', 'readwrite');
+          const store = transaction.objectStore('employees');
+          store.delete(id);
+
+          transaction.oncomplete = () => {
+            console.log('Item deleted successfully');
+            observer.next(); // Emit completion
+            observer.complete();
+          };
+
+          transaction.onerror = (event) => {
+            console.error('Error deleting item:', (event.target as IDBTransaction).error);
+            observer.error((event.target as IDBTransaction).error); // Emit error
+          };
+        },
+        error: (err) => {
+          observer.error(err); // Emit error if DB is not open
+        }
+      });
+    });
+  }
+
+  // Observable for DB status
+  getDbStatus(): Observable<boolean> {
+    return this.dbStatusSubject.asObservable();
   }
 }
