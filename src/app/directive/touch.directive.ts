@@ -1,3 +1,4 @@
+// Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
 import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Directive({

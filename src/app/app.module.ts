@@ -1,3 +1,4 @@
+// Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 

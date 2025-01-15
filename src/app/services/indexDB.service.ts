@@ -1,3 +1,4 @@
+// Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -9,14 +10,12 @@ export class IndexedDBService {
   private readonly dbName: string = 'myDatabase';
   private readonly dbVersion: number = 1;
   private db: IDBDatabase | undefined;
-  private dbStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private readonly dbStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor() {
-    // This is to emit the database status on service initialization
     this.dbStatusSubject.next(!!this.db);
   }
 
-  // Open Database method to initialize or retrieve the existing connection
   private openDatabase(): Observable<IDBDatabase> {
     return new Observable((observer) => {
       const request = indexedDB.open(this.dbName, this.dbVersion);
@@ -24,16 +23,16 @@ export class IndexedDBService {
       request.onsuccess = (event: Event) => {
         this.db = (event.target as IDBRequest).result;
         console.log('Database opened successfully');
-        this.dbStatusSubject.next(true); // Emit DB is ready
-        observer.next(this.db); // Emit the database instance
+        this.dbStatusSubject.next(true);
+        observer.next(this.db);
         observer.complete();
       };
 
       request.onerror = (event: Event) => {
         const error = (event.target as IDBRequest).error;
         console.error('Error opening database:', error);
-        this.dbStatusSubject.next(false); // Emit DB failure
-        observer.error(error); // Emit error
+        this.dbStatusSubject.next(false);
+        observer.error(error);
       };
 
       request.onupgradeneeded = (event: Event) => {
@@ -45,25 +44,23 @@ export class IndexedDBService {
     });
   }
 
-  // Ensure DB connection is ready or open it if necessary
   private ensureDBConnection(): Observable<void> {
     if (this.db) {
       return new Observable((observer) => {
-        observer.next(); // DB is already ready
+        observer.next();
         observer.complete();
       });
     } else {
       return this.openDatabase().pipe(
-        map(() => {}), // Convert the DB instance to void
+        map(() => {}),
         catchError((error) => {
           console.error('Error opening database:', error);
-          return throwError(error); // Re-throw error
+          return throwError(() => error);
         })
       );
     }
   }
 
-  // Add item to the database
   addEmployeeDetails(item: any): Observable<void> {
     return new Observable((observer) => {
       this.ensureDBConnection().subscribe({
@@ -74,23 +71,22 @@ export class IndexedDBService {
 
           transaction.oncomplete = () => {
             console.log('Item added successfully');
-            observer.next(); // Emit completion
+            observer.next();
             observer.complete();
           };
 
           transaction.onerror = (event) => {
             console.error('Error adding item:', (event.target as IDBTransaction).error);
-            observer.error((event.target as IDBTransaction).error); // Emit error
+            observer.error((event.target as IDBTransaction).error);
           };
         },
         error: (err) => {
-          observer.error(err); // Emit error if DB is not open
+          observer.error(err);
         }
       });
     });
   }
 
-  // Update item in the database
 updateEmployeeDetails(item: any): Observable<void> {
   return new Observable((observer) => {
     this.ensureDBConnection().subscribe({
@@ -98,7 +94,6 @@ updateEmployeeDetails(item: any): Observable<void> {
         const transaction = this.db!.transaction('employees', 'readwrite');
         const store = transaction.objectStore('employees');
 
-        // Attempt to update the item
         const request = store.put(item);
 
         request.onsuccess = () => {
@@ -109,7 +104,7 @@ updateEmployeeDetails(item: any): Observable<void> {
 
         request.onerror = (event) => {
           console.error('Error updating item:', (event.target as IDBRequest).error);
-          observer.error((event.target as IDBRequest).error); // Emit error
+          observer.error((event.target as IDBRequest).error);
         };
       },
       error: (err) => {
@@ -119,8 +114,6 @@ updateEmployeeDetails(item: any): Observable<void> {
   });
 }
 
-
-  // Get employee by ID
   getEmployeeById(id: number): Observable<any> {
     return new Observable((observer) => {
       this.ensureDBConnection().subscribe({
@@ -146,7 +139,6 @@ updateEmployeeDetails(item: any): Observable<void> {
     });
   }
 
-  // Get all employees
   getAllEmployees(): Observable<any[]> {
     return new Observable((observer) => {
       this.ensureDBConnection().subscribe({
@@ -172,7 +164,6 @@ updateEmployeeDetails(item: any): Observable<void> {
     });
   }
 
-  // Delete item from the database
   deleteItem(id: number): Observable<void> {
     return new Observable((observer) => {
       this.ensureDBConnection().subscribe({
@@ -198,7 +189,6 @@ updateEmployeeDetails(item: any): Observable<void> {
     });
   }
 
-  // Observable for DB status
   getDbStatus(): Observable<boolean> {
     return this.dbStatusSubject.asObservable();
   }
