@@ -6,85 +6,146 @@
   height: 60px;
   display: flex;
   align-items: center;
-  background-color: #1DA1F2;
+  background-color: #1da1f2;
   color: white;
   font-weight: 600;
+  font-size: 18px;
 }
 
 .toolbar img {
   margin: 0 16px;
 }
 
-
 .content {
   display: flex;
-  margin: 82px auto 32px;
+  margin: 60px auto 32px;
   max-width: 960px;
   flex-direction: column;
   align-items: center;
 }
 
-.buttom-container {
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.button-container {
   position: relative;
-  top: 480px;
-  float: right;
+  justify-content: end;
+  display: flex;
+  margin: 20px;
+
 }
-.list-container {
-  padding: 15px;
-}
+
 .card-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-width: 400px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 0;
   overflow: hidden;
   gap: 1em;
-    margin-bottom: 0.75em;
 }
 
 .card {
   flex-direction: row;
-  gap: 1em;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 0.5px solid #e0e0e0;
+  border-radius: 0;
+  display: flex;
 }
 
-/* Card Item */
+.card-item .employee-content {
+  flex-grow: 1;
+  width: 100%;
+  transition: transform 0.3s ease;
+  padding: 16px;
+}
+.card-item.swiped-left .employee-content {
+  transform: translateX(-20%);
+}
+
 .card-item {
-  padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
   flex: 1;
+  position: relative;
+  display: flex;
+  overflow: hidden;
 }
 
-
-
-.card:last-child {
-  border-bottom: none;
-}
-
-/* Card Title */
 .card-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin: 0;
-  color: #333;
+  color: #323238;
 }
 
-/* Card Subtitle */
 .card-subtitle {
   font-size: 14px;
-  color: #777;
+  color: #949c9e;
+  font-weight: 400;
   margin: 5px 0;
 }
 
-/* Card Date */
 .card-date {
   font-size: 12px;
-  color: #aaa;
+  color: #949c9e;
+  font-weight: 400;
   margin: 0;
 }
 
 .trash-icon {
-  padding: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 20%;
+  background-color: red;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  transform: translateX(100%);
+}
+
+[id^="swiped-"] .trash-icon {
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 0.3s ease;
+}
+
+.card-item > .trash-icon:hover {
+  background-color: darkred;
+}
+
+.trash-icon i {
+  font-size: 18px;
+}
+
+.heading-background {
+  background: #f2f2f2;
+  color: #1da1f2;
+  font-weight: 600;
+  font-size: 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.swipe-banner {
+  background: #f2f2f2;
+  font-size: 15px;
+  color: #949c9e;
+  font-weight: 400;
+  line-height: 20px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  height: 70px;
 }

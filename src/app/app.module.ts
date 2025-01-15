@@ -13,12 +13,17 @@ import { ButtonModule } from 'primeng/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
+import { SelectOptionsComponent } from './component/select-options/select-options.component';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { TouchDirective } from './directive/touch.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     AddEmployeeComponent,
-    EmployeeListComponent
+    SelectOptionsComponent,
+    EmployeeListComponent,
+    TouchDirective
   ],
   imports: [
     BrowserModule,
@@ -28,9 +33,10 @@ import { routes } from './app.routes';
     InputTextModule,
     ButtonModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    DynamicDialogModule
   ],
-  providers: [],
+  providers: [DialogService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

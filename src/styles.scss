@@ -5,9 +5,11 @@
 
 p-button > button {
   width: 73px;
-  height: 40px;
   outline: none;
   border: none;
+  font-size: 14px;
+  height: 36px;
+  border-radius: 4px;
 }
 .primary > button {
   color: #FFFFFF;
@@ -24,10 +26,71 @@ p-button > button {
       border: #fff;
       color: #1da1f2;
     }
+    button.primary {
+    color: #FFFFFF;
+    background-color: #1DA1F2;
+    }
+    button.secondary {
+      background-color: #EDF8FF;
+      color: #1DA1F2;
+    }
 }
 .calender-input {
   border: none;
 }
 .role-dropdown {
   border: none;
+}
+.p-calendar .p-datepicker {
+  border-radius: 16px;
+  padding: 24px 16px 16px 16px;
+}
+
+.p-inputtext {
+  height: 38px;
+}
+.pi{
+    line-height:38px;
+    margin: 0 0.5rem 0 0.5rem; /* Add some margin */
+}
+.input-group {
+    align-items: center;
+}
+.p-element .p-icon-wrapper {
+  height: 24px;
+    width: 24px;
+    margin: 0.25em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.p-button-icon-only {
+  padding: 0;
+  width: 30px;
+}
+.p-datepicker-touch-ui, .p-calendar .p-datepicker-touch-ui {
+  min-width: 90vw;
+}
+.p-datepicker-title {
+  button {
+    color: #333;
+  }
+}
+.p-datepicker-today {
+  span {
+    border: 1px solid #1DA1F2;
+    color: #1DA1F2;
+    background: white;
+  }
+}
+.p-datepicker-current-day {
+  span {
+    background: #1DA1F2;
+    color: white;
+  }
+}
+
+.p-datepicker table td > span.p-highlight {
+    background: #1DA1F2;
+    color: white;
 }

@@ -1,0 +1,7 @@
+<div class="bottom-sheet">
+  <ul>
+    <li *ngFor="let role of roles" (click)="selectRole(role)">
+      {{ role.label }}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,28 @@
+.bottom-sheet {
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+li {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+li:last-child {
+  border-bottom: none;
+}
+li:hover {
+  background: #f0f0f0;
+}

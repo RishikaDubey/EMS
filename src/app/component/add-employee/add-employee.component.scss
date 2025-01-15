@@ -9,6 +9,7 @@
   background-color: #1da1f2;
   color: white;
   font-weight: 600;
+  font-size: 18px;
 }
 
 .toolbar img {
@@ -53,6 +54,63 @@
   gap: 1em;
   padding: 10px 10px 5px 10px;
   margin-top: 5px;
-  border-top: 1px solid grey;
+  border-top: 0.5px solid #e0e0e0;
 }
 
+.pi-caret-down-filled {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid #1da1f2;
+}
+
+.input-group {
+  padding: 0;
+}
+
+i.pi {
+  margin: 0.25em;
+  &::before {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.cal-header {
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5em;
+
+  > button.secondary {
+    flex-basis: 48%;
+    height: 36px;
+    border-radius: 4px;
+    font-size: 14px !important;
+    font-weight: 400;
+  }
+}
+.cal-footer {
+  width: 100%;
+  .button-container {
+    border-width: 0.5px;
+    width: 100%;
+    border-color: #e0e0e0;
+
+    button {
+      height: 36px;
+      border-radius: 4px;
+      padding: 5px 20px;
+    }
+
+    .btns {
+      gap:0.5em;
+      justify-content: space-between;
+    }
+  }
+}

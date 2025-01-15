@@ -1,29 +1,70 @@
 <div class="toolbar">
-  <div class="m-2">Employee List</div>
+  <div class="p-3">Employee List</div>
 </div>
 
 <div class="content">
-  <div *ngIf="employeeList.length" class="w-100 list-container">
-    <ul *ngFor="let employee of employeeList" class="card-list">
-      <div class="card d-flex">
-        <li class="card-item" (click)="editEmployeeDetails(employee.id)">
-          <h3 class="card-title">{{employee.employeeName}}</h3>
-          <p class="card-subtitle">{{employee.employeeRole?.label}}</p>
-          <p class="card-date">From {{employee.startDate | date: 'd MMM, y'}}</p>
+  <div *ngIf="currEmployeeList.length" class="w-100 list-container">
+    <div class="p-3 heading-background">Current employees</div>
+    <ul class="card-list">
+      <div class="card d-flex" *ngFor="let employee of currEmployeeList">
+        <li class="card-item" [id]="employee.showTrash ? 'swiped-' + employee.id : null"
+          [ngClass]="{'swiped-left': employee.showTrash}"
+          [employeeId]="employee.id"
+          (swipeLeft)="onSwipeLeft($event, employee.id)"
+          (swipeRight)="onSwipeRight($event, employee.id)"
+          (mouseEnter)="onSwipeLeft($event, employee.id)"
+          (mouseExit)="onSwipeRight($event, employee.id)"
+           touchStart touchEnd>
+          <div class="employee-content" (click)="editEmployeeDetails(employee.id)">
+            <h3 class="card-title">{{employee.employeeName}}</h3>
+            <p class="card-subtitle">{{employee.employeeRole?.label}}</p>
+            <p class="card-date">From {{employee.startDate | date: 'd MMM, y'}}</p>
+          </div>
+          <div [ngClass]="{'show-trash': employee.showTrash}"
+            class="d-flex align-items-center trash-icon" (click)="deleteUser(employee.id)">
+            <i class="pi pi-trash"></i>
+          </div>
         </li>
-        <div class="d-flex align-items-center trash-icon" (click)="deleteUser(employee.id)">
-          <i class="pi pi-trash" style="color: #c00;"></i>
-        </div>
       </div>
-
-
     </ul>
   </div>
-  <div *ngIf="!employeeList.length">
+
+  <div *ngIf="prevEmployeeList.length" class="w-100 list-container">
+    <div class="p-3 heading-background">Previous employees</div>
+    <ul class="card-list">
+      <div class="card d-flex" *ngFor="let employee of prevEmployeeList">
+        <li class="card-item"
+          [id]="employee.showTrash ? 'swiped-' + employee.id : null" [employeeId]="employee.id"
+          [ngClass]="{'swiped-left': employee.showTrash}"
+          (swipeRight)="onSwipeRight($event, employee.id)"
+          (swipeLeft)="onSwipeLeft($event, employee.id)"
+          (mouseEnter)="onSwipeLeft($event, employee.id)"
+          (mouseExit)="onSwipeRight($event, employee.id)"
+          touchStart
+          touchEnd>
+          <div class="employee-content" (click)="editEmployeeDetails(employee.id)">
+            <h3 class="card-title">{{employee.employeeName}}</h3>
+            <p class="card-subtitle">{{employee.employeeRole?.label}}</p>
+            <p class="card-date">From {{employee.startDate | date: 'd MMM, y'}}</p>
+          </div>
+          <div [ngClass]="{'show-trash': employee.showTrash}"
+            class="d-flex align-items-center trash-icon" (click)="deleteUser(employee.id)">
+            <i class="pi pi-trash"></i>
+          </div>
+        </li>
+      </div>
+    </ul>
+  </div>
+
+  <div *ngIf="currEmployeeList.length || prevEmployeeList.length" class="p-3 swipe-banner">Swipe left to delete</div>
+
+  <div *ngIf="!currEmployeeList.length && !prevEmployeeList.length">
     <img src="../assets/image/noUSer.svg" alt="No Employee" width="250" height="250" />
   </div>
-</div>
 
-<div class="buttom-container">
-  <img src="../assets/image/addUser.svg" alt="No Employee" width="50" height="50" (click)="addUser()" />
+</div>
+<div class="footer">
+  <div class="button-container">
+    <img src="../assets/image/addUser.svg" alt="No Employee" width="50" height="50" (click)="addUser()" />
+  </div>
 </div>

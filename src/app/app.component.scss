@@ -1,6 +1,6 @@
 :host {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 18px;
+  font-family:  Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
   color: #333;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -39,6 +39,7 @@ input {
   background-color: #1DA1F2;
   color: white;
   font-weight: 600;
+  font-size: 18px;
 }
 
 .toolbar img {
@@ -53,4 +54,17 @@ input {
   max-width: 960px;
   flex-direction: column;
   align-items: center;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.dropdown-trigger:hover {
+  background: #f0f0f0;
 }
