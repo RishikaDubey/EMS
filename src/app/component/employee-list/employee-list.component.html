@@ -45,7 +45,7 @@
           <div class="employee-content" (click)="editEmployeeDetails(employee.id)">
             <h3 class="card-title">{{employee.employeeName}}</h3>
             <p class="card-subtitle">{{employee.employeeRole?.label}}</p>
-            <p class="card-date">From {{employee.startDate | date: 'd MMM, y'}}</p>
+            <p class="card-date">{{employee.startDate | date: 'd MMM, y'}} - {{employee.endDate | date: 'd MMM, y'}}</p>
           </div>
           <div [ngClass]="{'show-trash': employee.showTrash}"
             class="d-flex align-items-center trash-icon" (click)="deleteUser(employee.id)">

@@ -26,7 +26,6 @@ export class EmployeeListComponent {
     this.currEmployeeList = [];
     this.indexedDBService.getAllEmployees().subscribe({
       next: (employees) => {
-        console.log(employees);
         employees.forEach((emp) => {
           if (this.isPreviousDate(emp.endDate)) {
             this.prevEmployeeList.push(emp);
@@ -80,7 +79,6 @@ export class EmployeeListComponent {
     if (employee) {
       employee.showTrash = true;
     }
-    console.log("swiped left.", employeeId);
   }
 
   onSwipeRight(event: any, employeeId: number) {

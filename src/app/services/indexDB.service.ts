@@ -64,7 +64,7 @@ export class IndexedDBService {
   }
 
   // Add item to the database
-  addItem(item: any): Observable<void> {
+  addEmployeeDetails(item: any): Observable<void> {
     return new Observable((observer) => {
       this.ensureDBConnection().subscribe({
         next: () => {
@@ -89,6 +89,36 @@ export class IndexedDBService {
       });
     });
   }
+
+  // Update item in the database
+updateEmployeeDetails(item: any): Observable<void> {
+  return new Observable((observer) => {
+    this.ensureDBConnection().subscribe({
+      next: () => {
+        const transaction = this.db!.transaction('employees', 'readwrite');
+        const store = transaction.objectStore('employees');
+
+        // Attempt to update the item
+        const request = store.put(item);
+
+        request.onsuccess = () => {
+          console.log('Item updated successfully');
+          observer.next();
+          observer.complete();
+        };
+
+        request.onerror = (event) => {
+          console.error('Error updating item:', (event.target as IDBRequest).error);
+          observer.error((event.target as IDBRequest).error); // Emit error
+        };
+      },
+      error: (err) => {
+        observer.error(err);
+      }
+    });
+  });
+}
+
 
   // Get employee by ID
   getEmployeeById(id: number): Observable<any> {
@@ -126,8 +156,7 @@ export class IndexedDBService {
           const request = store.getAll();
 
           request.onsuccess = () => {
-            console.log('Retrieved employees:', request.result);
-            observer.next(request.result); // Emit result
+            observer.next(request.result);
             observer.complete();
           };
 
@@ -137,7 +166,7 @@ export class IndexedDBService {
           };
         },
         error: (err) => {
-          observer.error(err); // Emit error if DB is not open
+          observer.error(err);
         }
       });
     });
@@ -153,8 +182,7 @@ export class IndexedDBService {
           store.delete(id);
 
           transaction.oncomplete = () => {
-            console.log('Item deleted successfully');
-            observer.next(); // Emit completion
+            observer.next();
             observer.complete();
           };
 
@@ -164,7 +192,7 @@ export class IndexedDBService {
           };
         },
         error: (err) => {
-          observer.error(err); // Emit error if DB is not open
+          observer.error(err);
         }
       });
     });

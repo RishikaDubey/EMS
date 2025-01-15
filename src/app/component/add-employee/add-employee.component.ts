@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -10,9 +10,12 @@ import { SelectOptionsComponent } from '../select-options/select-options.compone
   templateUrl: './add-employee.component.html',
   styleUrls: ['./add-employee.component.scss']
 })
-export class AddEmployeeComponent {
+export class AddEmployeeComponent implements OnInit {
   employeeInfoForm!: FormGroup;
   ref: DynamicDialogRef | undefined;
+  employeeId!: number;
+  @ViewChild('noDateBtn') noDateButton: any;
+  previuosDate: any;
 
   constructor(
     private readonly _ngFb: FormBuilder,
@@ -32,15 +35,22 @@ export class AddEmployeeComponent {
       endDate: [''],
     });
     this.route.queryParams.subscribe((params) => {
-      let id = Number(params['id']);
-      if(id) {
-        this.getEmployeeById(id);
+      this.employeeId = Number(params['id']);
+      if (this.employeeId) {
+        this.getEmployeeById(this.employeeId);
       }
     });
   }
 
+  onOverlayShow() {
+    setTimeout(() => {
+      if (this.noDateButton) {
+        this.noDateButton.nativeElement.focus();
+      }
+    }, 0);
+  }
+
   openBottomSheet() {
-    console.log('Opening bottom sheet...');
     this.ref = this.dialogService.open(SelectOptionsComponent, {
       header: '',
       width: '100%',
@@ -50,7 +60,7 @@ export class AddEmployeeComponent {
 
     this.ref.onClose.subscribe((role) => {
       if (role) {
-        this.employeeInfoForm.patchValue({employeeRole: role, role: role.label});
+        this.employeeInfoForm.patchValue({ employeeRole: role, role: role.label });
       }
     });
   }
@@ -60,16 +70,25 @@ export class AddEmployeeComponent {
       let empInfo = this.employeeInfoForm.getRawValue();
       if (empInfo?.id <= 0) {
         empInfo.id = Date.now();
+        delete empInfo.role;
+        this.indexedDBService.addEmployeeDetails(empInfo).subscribe({
+          next: () => {
+            console.log('Item added successfully');
+          },
+          error: (err) => {
+            console.error('Error adding item:', err);
+          }
+        });
+      } else {
+        this.indexedDBService.updateEmployeeDetails(empInfo).subscribe({
+          next: () => {
+            console.log('Item update successfully');
+          },
+          error: (err) => {
+            console.error('Error adding item:', err);
+          }
+        });
       }
-      delete empInfo.role;
-      this.indexedDBService.addItem(empInfo).subscribe({
-        next: () => {
-          console.log('Item added successfully');
-        },
-        error: (err) => {
-          console.error('Error adding item:', err);
-        }
-      });
       this.router.navigateByUrl('/');
     } else {
       this.employeeInfoForm.markAllAsTouched();
@@ -79,6 +98,19 @@ export class AddEmployeeComponent {
 
   onCancel(): void {
     this.router.navigateByUrl('/');
+  }
+
+  onDateSave(calendar: any): void {
+    calendar.overlayVisible = false;
+  }
+
+  onDateFocus(previuosDate: any) {
+    this.previuosDate = previuosDate;
+  }
+
+  onDateCancel(calendar: any, controlName: string): void {
+    this.employeeInfoForm.patchValue({ [controlName]: this.previuosDate })
+    calendar.overlayVisible = false;
   }
 
   getEmployeeById(id: number): void {
@@ -93,8 +125,30 @@ export class AddEmployeeComponent {
     });
   }
 
-  openDatePicker() {
+  selectNoDate(): void {
+    this.employeeInfoForm.controls['startDate'].setValue(null);
+  }
 
+  selectToday(): void {
+    const today = new Date();
+    this.employeeInfoForm.controls['startDate'].setValue(today);
+  }
+
+  selectNextMonday(selectedDate: Date): void {
+    const nextMonday = new Date(selectedDate.setDate(selectedDate.getDate() + ((8 - selectedDate.getDay()) % 7)));
+    this.employeeInfoForm.controls['startDate'].setValue(nextMonday);
+  }
+
+  selectNextTuesday(selectedDate: Date): void {
+    const dayOfWeek = selectedDate.getDay();
+    const daysToAdd = (2 - dayOfWeek + 7) % 7;
+    selectedDate.setDate(selectedDate.getDate() + (daysToAdd === 0 ? 7 : daysToAdd));
+    this.employeeInfoForm.controls['startDate'].setValue(selectedDate);
+  }
+
+  selectAfterOneWeek(selectedDate: Date): void {
+    const nextWeek = new Date(selectedDate.setDate(selectedDate.getDate() + 7));
+    this.employeeInfoForm.controls['startDate'].setValue(nextWeek);
   }
 
 }

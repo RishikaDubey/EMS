@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "deploy": "ng build && firebase deploy",
     "webfonts:build": "node --trace-warnings src/assets/web-fonts-generator.js"
   },
   "private": true,

@@ -4,7 +4,7 @@
 @import "primeng/resources/primeng.css";
 
 p-button > button {
-  width: 73px;
+  width: 85px;
   outline: none;
   border: none;
   font-size: 14px;
@@ -33,6 +33,10 @@ p-button > button {
     button.secondary {
       background-color: #EDF8FF;
       color: #1DA1F2;
+    }
+    button.secondary:focus {
+        color: #FFFFFF;
+        background-color: #1DA1F2;
     }
 }
 .calender-input {
