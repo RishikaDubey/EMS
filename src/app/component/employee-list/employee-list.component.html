@@ -44,7 +44,7 @@
     </ul>
   </div>
 
-  <div *ngIf="isTouchDevice && (currEmployeeList.length || prevEmployeeList.length)" class="p-3 swipe-banner">Swipe left
+  <div *ngIf="isTouchDevice() && (currEmployeeList.length || prevEmployeeList.length)" class="p-3 swipe-banner">Swipe left
     to delete</div>
 
   <div *ngIf="!currEmployeeList.length && !prevEmployeeList.length">
@@ -57,7 +57,7 @@
     <img src="../assets/image/addUser.svg" alt="No Employee" width="50" height="50" (click)="addUser()" />
   </div>
 
-  <div *ngIf="showMessage" class="toast-message">
+  <div *ngIf="showMessage()" class="toast-message">
     <p-messages [(value)]="messages" [enableService]="false" [closable]='false' />
     <button class="undo-button" (click)="undoLastDelete()">Undo</button>
   </div>

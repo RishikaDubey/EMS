@@ -1,10 +1,11 @@
 // Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { IndexedDBService } from 'src/app/services/indexed-db.service';
 import { SelectOptionsComponent } from '../select-options/select-options.component';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-add-employee',
@@ -17,13 +18,15 @@ export class AddEmployeeComponent implements OnInit {
   employeeId!: number;
   @ViewChild('noDateBtn') noDateButton: any;
   previousDate: any;
+  isTouchDevice = this.commonService.isTouchDevice;
 
   constructor(
     private readonly _ngFb: FormBuilder,
     private readonly router: Router,
     private readonly indexedDBService: IndexedDBService,
     private readonly route: ActivatedRoute,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private readonly commonService: CommonService
   ) { }
 
   ngOnInit(): void {
@@ -126,32 +129,32 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
-  selectNoDate(): void {
-    this.employeeInfoForm.controls['startDate'].setValue(null);
+  selectNoDate(controlName: string): void {
+    this.employeeInfoForm.controls[controlName].setValue(null);
   }
 
-  selectToday(): void {
+  selectToday(controlName: string): void {
     const today = new Date();
-    this.employeeInfoForm.controls['startDate'].setValue(today);
+    this.employeeInfoForm.controls[controlName].setValue(today);
   }
 
-  selectNextMonday(selectedDate: Date): void {
+  selectNextMonday(controlName: string, selectedDate: Date): void {
     const dayOfWeek = selectedDate.getDay();
     const daysToAdd = (1 - dayOfWeek + 7) % 7;
     selectedDate.setDate(selectedDate.getDate() + (daysToAdd === 0 ? 7 : daysToAdd));
-    this.employeeInfoForm.controls['startDate'].setValue(selectedDate);
+    this.employeeInfoForm.controls[controlName].setValue(selectedDate);
   }
 
-  selectNextTuesday(selectedDate: Date): void {
+  selectNextTuesday(controlName: string, selectedDate: Date): void {
     const dayOfWeek = selectedDate.getDay();
     const daysToAdd = (2 - dayOfWeek + 7) % 7;
     selectedDate.setDate(selectedDate.getDate() + (daysToAdd === 0 ? 7 : daysToAdd));
-    this.employeeInfoForm.controls['startDate'].setValue(selectedDate);
+    this.employeeInfoForm.controls[controlName].setValue(selectedDate);
   }
 
-  selectAfterOneWeek(selectedDate: Date): void {
+  selectAfterOneWeek(controlName: string, selectedDate: Date): void {
     const nextWeek = new Date(selectedDate.setDate(selectedDate.getDate() + 7));
-    this.employeeInfoForm.controls['startDate'].setValue(nextWeek);
+    this.employeeInfoForm.controls[controlName].setValue(nextWeek);
   }
 
 }

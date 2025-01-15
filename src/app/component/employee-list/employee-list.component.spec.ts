@@ -70,7 +70,7 @@ describe('EmployeeListComponent', () => {
     expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/add');
   });
 
-  it('should call router.navigate with /add and query params on editEmployeeDetails', () => {
+  it('should call router.navigate with /edit and query params on editEmployeeDetails', () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     component['router'] = routerSpy;
 
@@ -78,7 +78,7 @@ describe('EmployeeListComponent', () => {
 
     component.editEmployeeDetails(editId);
 
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/add'], {
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/edit'], {
       queryParams: { id: editId },
     });
   });

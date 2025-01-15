@@ -1,6 +1,7 @@
 // Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
-import { Component, ElementRef, NgZone, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonService } from 'src/app/services/common.service';
 import { IndexedDBService } from 'src/app/services/indexed-db.service';
 
 @Component({
@@ -8,42 +9,29 @@ import { IndexedDBService } from 'src/app/services/indexed-db.service';
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss']
 })
-export class EmployeeListComponent {
+export class EmployeeListComponent implements OnInit {
   currEmployeeList: any = [];
   prevEmployeeList: any = [];
   @ViewChildren('cardItem') cardItems!: QueryList<ElementRef>;
   startX: number = 0;
-  showMessage: boolean = false;
-  isTouchDevice: boolean = false;
+  showMessage = signal(false);
   messages: any = [{
     severity: 'contrast',
     detail: 'Employee data has been deleted',
     life: 3000
   }];
   lastDeletedEmployee: any = null;
+  isTouchDevice = this.commonService.isTouchDevice;
 
   constructor(
     private router: Router,
     private indexedDBService: IndexedDBService,
-    private readonly ngZone: NgZone
+    private readonly ngZone: NgZone,
+    private readonly commonService : CommonService
   ) { }
 
   ngOnInit(): void {
-    this.detectTouchDevice();
-    window.addEventListener('resize', this.detectTouchDevice.bind(this));
-    window.addEventListener('orientationchange', this.detectTouchDevice.bind(this));
-
-
     this.getAllEmployees();
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('resize', this.detectTouchDevice.bind(this));
-    window.removeEventListener('orientationchange', this.detectTouchDevice.bind(this));
-  }
-
-  private detectTouchDevice() {
-    this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   }
 
   getAllEmployees() {
@@ -88,11 +76,11 @@ export class EmployeeListComponent {
     this.indexedDBService.deleteItem(id).subscribe({
       next: () => {
         this.getAllEmployees();
-        this.showMessage = true;
+        this.showMessage.set(true);
         setTimeout(() => {
           this.ngZone.run(() => {
             this.lastDeletedEmployee = null;
-            this.showMessage = false;
+            this.showMessage.set(false);
             console.log('lastDeletedEmployee has been set to null');
           });
         }, this.messages[0].life);
@@ -131,6 +119,7 @@ export class EmployeeListComponent {
         next: () => {
           this.lastDeletedEmployee = null;
           this.getAllEmployees();
+          this.showMessage.set(false);
           console.log('Employee restored successfully.');
         },
         error: (err) => {

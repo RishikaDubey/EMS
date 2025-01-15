@@ -17,11 +17,13 @@ The **Employee Management System** is a web application built using **Angular 16
 - **Responsive UI**: The user interface is responsive and adjusts across devices (desktop, tablet, mobile).
 - **IndexedDB**: Data is stored locally in the user's browser using IndexedDB.
 - **Firebase Hosting**: App is hosted using the Firebase.
+- **Unit Testing**: App has over 60% test coverage.
 
 ## Technologies Used
 
 - **Frontend**:
   - **Angular 16**: The application is developed using Angular 16 for its reactive features, performance improvements, and enhanced developer experience.
+  - **Angular Signals**: Used for managing reactive state changes, enabling automatic updates in components.
   - **RxJS**: For managing asynchronous operations and handling reactive forms.
   - **PrimeNG**: For UI components such as forms, buttons, modals, and tables.
   - **Firebase**: Used hosting the app.

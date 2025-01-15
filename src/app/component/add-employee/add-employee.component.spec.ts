@@ -132,32 +132,32 @@ describe('AddEmployeeComponent', () => {
   });
 
   it('should set start date to null on selecting "No Date"', () => {
-    component.selectNoDate();
+    component.selectNoDate("startDate");
     expect(component.employeeInfoForm.controls['startDate'].value).toBeNull();
   });
 
   it('should set start date to today on selecting "Today"', () => {
     const today = new Date();
-    component.selectToday();
+    component.selectToday("startDate");
     expect(component.employeeInfoForm.controls['startDate'].value.toDateString()).toEqual(today.toDateString());
   });
 
   it('should calculate next Monday and set start date', () => {
     const today = new Date('2025-01-14');
-    component.selectNextMonday(today);
+    component.selectNextMonday("startDate", today);
     expect(component.employeeInfoForm.controls['startDate'].value.getDay()).toEqual(1);
   });
 
   it('should calculate next Tuesday and set start date', () => {
     const today = new Date('2025-01-14');
-    component.selectNextTuesday(today);
+    component.selectNextTuesday("startDate", today);
     expect(component.employeeInfoForm.controls['startDate'].value.getDay()).toEqual(2);
   });
 
   it('should set start date to one week ahead', () => {
     const today = new Date('2025-01-15');
     const today1 = new Date('2025-01-15');
-    component.selectAfterOneWeek(today);
+    component.selectAfterOneWeek("startDate", today);
     const nextWeek = new Date(today.setDate(today1.getDate() + 7));
     expect(component.employeeInfoForm.controls['startDate'].value.toDateString()).toEqual(nextWeek.toDateString());
   });
