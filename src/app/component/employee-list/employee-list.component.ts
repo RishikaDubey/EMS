@@ -1,7 +1,6 @@
 // Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
 import { Component, ElementRef, NgZone, QueryList, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
 import { IndexedDBService } from 'src/app/services/indexDB.service';
 
 @Component({
