@@ -64,6 +64,11 @@
   <div class="button-container">
     <img src="../assets/image/addUser.svg" alt="No Employee" width="50" height="50" (click)="addUser()" />
   </div>
-  <p-messages *ngIf="showMessage" [(value)]="messages" [enableService]="false" [closable]='false' />
+
+  <div *ngIf="showMessage" class="toast-message">
+    <p-messages [(value)]="messages" [enableService]="false" [closable]='false' />
+    <button class="undo-button" (click)="undoLastDelete()">Undo</button>
+  </div>
+
 </div>
 

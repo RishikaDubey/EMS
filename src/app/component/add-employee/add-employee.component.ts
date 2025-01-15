@@ -74,19 +74,19 @@ export class AddEmployeeComponent implements OnInit {
         delete empInfo.role;
         this.indexedDBService.addEmployeeDetails(empInfo).subscribe({
           next: () => {
-            console.log('Item added successfully');
+            console.log('Employee added successfully');
           },
           error: (err) => {
-            console.error('Error adding item:', err);
+            console.error('Error adding employee:', err);
           }
         });
       } else {
         this.indexedDBService.updateEmployeeDetails(empInfo).subscribe({
           next: () => {
-            console.log('Item update successfully');
+            console.log('Employee update successfully');
           },
           error: (err) => {
-            console.error('Error adding item:', err);
+            console.error('Error updating employee:', err);
           }
         });
       }

@@ -1,5 +1,5 @@
 // Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, NgZone, QueryList, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { IndexedDBService } from 'src/app/services/indexDB.service';
@@ -19,12 +19,14 @@ export class EmployeeListComponent {
   messages: any = [{
     severity: 'contrast',
     detail: 'Employee data has been deleted',
-    life: 500000
+    life: 3000
   }];
+  lastDeletedEmployee: any = null;
 
   constructor(
     private readonly router: Router,
-    private readonly indexedDBService: IndexedDBService
+    private readonly indexedDBService: IndexedDBService,
+    private readonly ngZone: NgZone
   ) { }
 
   ngOnInit(): void {
@@ -83,10 +85,18 @@ export class EmployeeListComponent {
   }
 
   deleteUser(id: number): void {
+    this.lastDeletedEmployee = [...this.currEmployeeList, ...this.prevEmployeeList].find(obj => obj.id === id);
     this.indexedDBService.deleteItem(id).subscribe({
-      next: (employees) => {
+      next: () => {
         this.getAllEmployees();
         this.showMessage = true;
+        setTimeout(() => {
+          this.ngZone.run(() => {
+            this.lastDeletedEmployee = null;
+            this.showMessage = false;
+            console.log('lastDeletedEmployee has been set to null');
+          });
+        }, this.messages[0].life);
         console.log(`Employee with ${id} deleted.:`);
       },
       error: (err) => {
@@ -114,7 +124,22 @@ export class EmployeeListComponent {
     if (employee) {
       employee.showTrash = false;
     }
-    console.log("swiped right.", employeeId);
+  }
+
+  undoLastDelete() {
+    if(this.lastDeletedEmployee != null) {
+      this.indexedDBService.addEmployeeDetails(this.lastDeletedEmployee).subscribe({
+        next: () => {
+          this.lastDeletedEmployee = null;
+          this.getAllEmployees();
+          console.log('Employee restored successfully.');
+        },
+        error: (err) => {
+          console.error('Error restoring employee:', err);
+          this.getAllEmployees();
+        }
+      });
+    }
   }
 
 

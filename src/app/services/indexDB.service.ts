@@ -22,7 +22,6 @@ export class IndexedDBService {
 
       request.onsuccess = (event: Event) => {
         this.db = (event.target as IDBRequest).result;
-        console.log('Database opened successfully');
         this.dbStatusSubject.next(true);
         observer.next(this.db);
         observer.complete();
@@ -70,7 +69,6 @@ export class IndexedDBService {
           store.add(item);
 
           transaction.oncomplete = () => {
-            console.log('Item added successfully');
             observer.next();
             observer.complete();
           };
@@ -97,7 +95,6 @@ updateEmployeeDetails(item: any): Observable<void> {
         const request = store.put(item);
 
         request.onsuccess = () => {
-          console.log('Item updated successfully');
           observer.next();
           observer.complete();
         };
