@@ -7,7 +7,7 @@
     <div class="flex justify-center w-100">
       <div class="mb-3 input-group">
         <i class="pi pi-user"></i>
-        <input type="text" pInputText placeholder="Enter username" [formControlName]="'employeeName'" />
+        <input type="text" pInputText placeholder="Employee name" [formControlName]="'employeeName'" />
       </div>
       <div class="mb-3 input-group">
         <i class="pi pi-briefcase"></i>
@@ -76,7 +76,7 @@
           <i class="m-3 pi pi-arrow-right" style="color: #1da1f2"></i>
         </div>
         <div class="input-group">
-          <p-calendar #calendarEndDate inputStyleClass="calender-input" [touchUI]="isTouchDevice() ? true : false" styleClass="calender"
+          <p-calendar #calendarEndDate inputStyleClass="calender-input" [touchUI]="isTouchDevice() ? true : false" styleClass="calender" placeholder="No Date"
             [showIcon]="true" inputId="endDate" [formControlName]="'endDate'" dateFormat="dd M yy"
             [hideOnDateTimeSelect]="false" [minDate]="employeeInfoForm.controls['startDate'].value"
             (onFocus)="onDateFocus(employeeInfoForm.controls['endDate'].value)">
@@ -111,7 +111,7 @@
                 <div class="button-container justify-content-between">
                   <span>
                     <i class="pi pi-calendar-times"></i>
-                    <span *ngIf="employeeInfoForm.controls['startDate'].value">{{
+                    <span *ngIf="employeeInfoForm.controls['endDate'].value">{{
                       employeeInfoForm.controls["endDate"].value
                       | date : "d MMM y"
                       }}</span>

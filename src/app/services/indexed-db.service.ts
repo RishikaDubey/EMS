@@ -7,7 +7,7 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class IndexedDBService {
-  private readonly dbName: string = 'myDatabase';
+  private readonly dbName: string = 'empDatabase';
   private readonly dbVersion: number = 1;
   private db: IDBDatabase | undefined;
   private readonly dbStatusSubject: BehaviorSubject<boolean> =

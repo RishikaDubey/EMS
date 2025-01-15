@@ -47,7 +47,7 @@
   <div *ngIf="isTouchDevice() && (currEmployeeList.length || prevEmployeeList.length)" class="p-3 swipe-banner">Swipe left
     to delete</div>
 
-  <div *ngIf="!currEmployeeList.length && !prevEmployeeList.length">
+  <div *ngIf="!currEmployeeList.length && !prevEmployeeList.length" class="m-auto">
     <img src="../assets/image/noUser.svg" alt="No Employee" width="250" height="250" />
   </div>
 
