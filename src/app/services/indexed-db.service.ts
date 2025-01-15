@@ -4,13 +4,14 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IndexedDBService {
   private readonly dbName: string = 'myDatabase';
   private readonly dbVersion: number = 1;
   private db: IDBDatabase | undefined;
-  private readonly dbStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private readonly dbStatusSubject: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
   constructor() {
     this.dbStatusSubject.next(!!this.db);
@@ -74,42 +75,48 @@ export class IndexedDBService {
           };
 
           transaction.onerror = (event) => {
-            console.error('Error adding item:', (event.target as IDBTransaction).error);
+            console.error(
+              'Error adding item:',
+              (event.target as IDBTransaction).error
+            );
             observer.error((event.target as IDBTransaction).error);
           };
         },
         error: (err) => {
           observer.error(err);
-        }
+        },
       });
     });
   }
 
-updateEmployeeDetails(item: any): Observable<void> {
-  return new Observable((observer) => {
-    this.ensureDBConnection().subscribe({
-      next: () => {
-        const transaction = this.db!.transaction('employees', 'readwrite');
-        const store = transaction.objectStore('employees');
+  updateEmployeeDetails(item: any): Observable<void> {
+    return new Observable((observer) => {
+      this.ensureDBConnection().subscribe({
+        next: () => {
+          const transaction = this.db!.transaction('employees', 'readwrite');
+          const store = transaction.objectStore('employees');
 
-        const request = store.put(item);
+          const request = store.put(item);
 
-        request.onsuccess = () => {
-          observer.next();
-          observer.complete();
-        };
+          request.onsuccess = () => {
+            observer.next();
+            observer.complete();
+          };
 
-        request.onerror = (event) => {
-          console.error('Error updating item:', (event.target as IDBRequest).error);
-          observer.error((event.target as IDBRequest).error);
-        };
-      },
-      error: (err) => {
-        observer.error(err);
-      }
+          request.onerror = (event) => {
+            console.error(
+              'Error updating item:',
+              (event.target as IDBRequest).error
+            );
+            observer.error((event.target as IDBRequest).error);
+          };
+        },
+        error: (err) => {
+          observer.error(err);
+        },
+      });
     });
-  });
-}
+  }
 
   getEmployeeById(id: number): Observable<any> {
     return new Observable((observer) => {
@@ -125,13 +132,16 @@ updateEmployeeDetails(item: any): Observable<void> {
           };
 
           request.onerror = (event) => {
-            console.error('Error retrieving employee:', (event.target as IDBRequest).error);
+            console.error(
+              'Error retrieving employee:',
+              (event.target as IDBRequest).error
+            );
             observer.error((event.target as IDBRequest).error); // Emit error
           };
         },
         error: (err) => {
           observer.error(err); // Emit error if DB is not open
-        }
+        },
       });
     });
   }
@@ -150,13 +160,16 @@ updateEmployeeDetails(item: any): Observable<void> {
           };
 
           request.onerror = (event) => {
-            console.error('Error retrieving employees:', (event.target as IDBRequest).error);
+            console.error(
+              'Error retrieving employees:',
+              (event.target as IDBRequest).error
+            );
             observer.error((event.target as IDBRequest).error); // Emit error
           };
         },
         error: (err) => {
           observer.error(err);
-        }
+        },
       });
     });
   }
@@ -175,13 +188,16 @@ updateEmployeeDetails(item: any): Observable<void> {
           };
 
           transaction.onerror = (event) => {
-            console.error('Error deleting item:', (event.target as IDBTransaction).error);
+            console.error(
+              'Error deleting item:',
+              (event.target as IDBTransaction).error
+            );
             observer.error((event.target as IDBTransaction).error); // Emit error
           };
         },
         error: (err) => {
           observer.error(err);
-        }
+        },
       });
     });
   }

@@ -1,7 +1,7 @@
 // Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
 import { Component, ElementRef, NgZone, QueryList, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
-import { IndexedDBService } from 'src/app/services/indexDB.service';
+import { IndexedDBService } from 'src/app/services/indexed-db.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -23,8 +23,8 @@ export class EmployeeListComponent {
   lastDeletedEmployee: any = null;
 
   constructor(
-    private readonly router: Router,
-    private readonly indexedDBService: IndexedDBService,
+    private router: Router,
+    private indexedDBService: IndexedDBService,
     private readonly ngZone: NgZone
   ) { }
 
@@ -80,7 +80,7 @@ export class EmployeeListComponent {
   }
 
   editEmployeeDetails(id: number): void {
-    this.router.navigate(['/add'], { queryParams: { id: id } });
+    this.router.navigate(['/edit'], { queryParams: { id: id } });
   }
 
   deleteUser(id: number): void {
@@ -126,7 +126,7 @@ export class EmployeeListComponent {
   }
 
   undoLastDelete() {
-    if(this.lastDeletedEmployee != null) {
+    if (this.lastDeletedEmployee != null) {
       this.indexedDBService.addEmployeeDetails(this.lastDeletedEmployee).subscribe({
         next: () => {
           this.lastDeletedEmployee = null;

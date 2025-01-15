@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { IndexedDBService } from 'src/app/services/indexDB.service';
+import { IndexedDBService } from 'src/app/services/indexed-db.service';
 import { SelectOptionsComponent } from '../select-options/select-options.component';
 
 @Component({

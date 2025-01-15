@@ -50,7 +50,7 @@
 }
 .button-container {
   position: relative;
-  justify-content: end;
+  justify-content: flex-end;
   display: flex;
   gap: 1em;
   padding: 10px 10px 5px 10px;
@@ -110,7 +110,7 @@ i.pi {
     }
 
     .btns {
-      gap:0.5em;
+      gap: 0.5em;
       justify-content: space-between;
     }
   }

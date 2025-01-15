@@ -33,10 +33,9 @@
 
 .button-container {
   position: relative;
-  justify-content: end;
+  justify-content: flex-end;
   display: flex;
   margin: 20px;
-
 }
 
 .card-list {
@@ -152,7 +151,7 @@
 }
 
 li.card-item:hover {
-   .trash-icon {
+  .trash-icon {
     transform: translateX(0);
     opacity: 1;
     transition: transform 0.3s ease;

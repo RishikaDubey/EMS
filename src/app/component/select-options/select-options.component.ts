@@ -15,7 +15,7 @@ export class SelectOptionsComponent {
     { id: 4, label: 'Product Owner', value: 'product-owner' },
   ];
 
-  constructor(public ref: DynamicDialogRef) {}
+  constructor(public ref: DynamicDialogRef) { }
 
   selectRole(role: any) {
     this.ref.close(role);

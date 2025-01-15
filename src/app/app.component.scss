@@ -1,6 +1,7 @@
 // Author: Rishika Dubey | Version: 1.0.0 | Date: 2025-01-14
 :host {
-  font-family:  Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
   color: #333;
   box-sizing: border-box;
@@ -37,7 +38,7 @@ input {
   height: 60px;
   display: flex;
   align-items: center;
-  background-color: #1DA1F2;
+  background-color: #1da1f2;
   color: white;
   font-weight: 600;
   font-size: 18px;
@@ -46,7 +47,6 @@ input {
 .toolbar img {
   margin: 0 16px;
 }
-
 
 .content {
   display: flex;

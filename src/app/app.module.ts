@@ -25,7 +25,7 @@ import { TouchDirective } from './directive/touch.directive';
     AddEmployeeComponent,
     SelectOptionsComponent,
     EmployeeListComponent,
-    TouchDirective
+    TouchDirective,
   ],
   imports: [
     BrowserModule,
@@ -37,9 +37,10 @@ import { TouchDirective } from './directive/touch.directive';
     MessagesModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
-    DynamicDialogModule
+    DynamicDialogModule,
   ],
+  exports: [ButtonModule],
   providers: [DialogService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
