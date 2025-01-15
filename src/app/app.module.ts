@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessagesModule } from 'primeng/messages';
 import { ButtonModule } from 'primeng/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -32,6 +33,7 @@ import { TouchDirective } from './directive/touch.directive';
     DropdownModule,
     InputTextModule,
     ButtonModule,
+    MessagesModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     DynamicDialogModule

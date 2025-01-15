@@ -114,7 +114,7 @@
   transform: translateX(100%);
 }
 
-[id^="swiped-"] .trash-icon {
+.card-item.swiped-left .trash-icon {
   transform: translateX(0);
   opacity: 1;
   transition: transform 0.3s ease;
@@ -148,4 +148,12 @@
   position: fixed;
   bottom: 0;
   height: 70px;
+}
+
+li.card-item:hover {
+   .trash-icon {
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 0.3s ease;
+  }
 }

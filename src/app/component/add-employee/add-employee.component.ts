@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -15,7 +15,7 @@ export class AddEmployeeComponent implements OnInit {
   ref: DynamicDialogRef | undefined;
   employeeId!: number;
   @ViewChild('noDateBtn') noDateButton: any;
-  previuosDate: any;
+  previousDate: any;
 
   constructor(
     private readonly _ngFb: FormBuilder,
@@ -104,12 +104,12 @@ export class AddEmployeeComponent implements OnInit {
     calendar.overlayVisible = false;
   }
 
-  onDateFocus(previuosDate: any) {
-    this.previuosDate = previuosDate;
+  onDateFocus(previousDate: any) {
+    this.previousDate = previousDate;
   }
 
   onDateCancel(calendar: any, controlName: string): void {
-    this.employeeInfoForm.patchValue({ [controlName]: this.previuosDate })
+    this.employeeInfoForm.patchValue({ [controlName]: this.previousDate })
     calendar.overlayVisible = false;
   }
 
@@ -135,8 +135,10 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   selectNextMonday(selectedDate: Date): void {
-    const nextMonday = new Date(selectedDate.setDate(selectedDate.getDate() + ((8 - selectedDate.getDay()) % 7)));
-    this.employeeInfoForm.controls['startDate'].setValue(nextMonday);
+    const dayOfWeek = selectedDate.getDay();
+    const daysToAdd = (1 - dayOfWeek + 7) % 7;
+    selectedDate.setDate(selectedDate.getDate() + (daysToAdd === 0 ? 7 : daysToAdd));
+    this.employeeInfoForm.controls['startDate'].setValue(selectedDate);
   }
 
   selectNextTuesday(selectedDate: Date): void {

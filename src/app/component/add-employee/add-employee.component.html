@@ -23,7 +23,7 @@
             [hideOnDateTimeSelect]="false">
             <ng-template pTemplate="header">
               <div class="d-flex cal-header">
-                <button class="secondary" label="No Date" severity="secondary" (click)="selectNoDate()">
+                <button *ngIf="!employeeInfoForm.controls['startDate'].value" class="secondary" label="No Date" severity="secondary" (click)="selectNoDate()">
                   No Date
                 </button>
                 <button class="secondary" label="Today" (click)="selectToday()">
@@ -77,7 +77,7 @@
         <div class="input-group">
           <p-calendar #calendarEndDate inputStyleClass="calender-input" [touchUI]="true" styleClass="calender"
             [showIcon]="true" inputId="endDate" [formControlName]="'endDate'" dateFormat="dd M yy"
-             [hideOnDateTimeSelect]="false" (onFocus)="onDateFocus(employeeInfoForm.controls['endDate'].value)">
+            [hideOnDateTimeSelect]="false" [minDate]="employeeInfoForm.controls['startDate'].value" (onFocus)="onDateFocus(employeeInfoForm.controls['endDate'].value)">
             <ng-template pTemplate="header">
               <div class="d-flex cal-header">
 

@@ -1,5 +1,6 @@
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { IndexedDBService } from 'src/app/services/indexDB.service';
 
 @Component({
@@ -12,13 +13,35 @@ export class EmployeeListComponent {
   prevEmployeeList: any = [];
   @ViewChildren('cardItem') cardItems!: QueryList<ElementRef>;
   startX: number = 0;
+  showMessage: boolean = false;
+  isTouchDevice: boolean = false;
+  messages: any = [{
+    severity: 'contrast',
+    detail: 'Employee data has been deleted',
+    life: 500000
+  }];
+
   constructor(
     private readonly router: Router,
     private readonly indexedDBService: IndexedDBService
   ) { }
 
   ngOnInit(): void {
+    this.detectTouchDevice();
+    window.addEventListener('resize', this.detectTouchDevice.bind(this));
+    window.addEventListener('orientationchange', this.detectTouchDevice.bind(this));
+
+
     this.getAllEmployees();
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.detectTouchDevice.bind(this));
+    window.removeEventListener('orientationchange', this.detectTouchDevice.bind(this));
+  }
+
+  private detectTouchDevice() {
+    this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   }
 
   getAllEmployees() {
@@ -62,6 +85,7 @@ export class EmployeeListComponent {
     this.indexedDBService.deleteItem(id).subscribe({
       next: (employees) => {
         this.getAllEmployees();
+        this.showMessage = true;
         console.log(`Employee with ${id} deleted.:`);
       },
       error: (err) => {
