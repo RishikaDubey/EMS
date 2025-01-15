@@ -73,6 +73,7 @@ export class EmployeeListComponent implements OnInit {
 
   deleteUser(id: number): void {
     this.lastDeletedEmployee = [...this.currEmployeeList, ...this.prevEmployeeList].find(obj => obj.id === id);
+    this.lastDeletedEmployee.showTrash = false;
     this.indexedDBService.deleteItem(id).subscribe({
       next: () => {
         this.getAllEmployees();
